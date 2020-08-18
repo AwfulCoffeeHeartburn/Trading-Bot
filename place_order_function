@@ -1,0 +1,50 @@
+import pandas as pd
+import pyEX
+import alpaca_trade_api as tradeapi
+from datetime import datetime
+import os
+
+'''
+p = pyEX.Client('https://cloud.iexapis.com/')
+ticker = 'AMD'
+timeframe = '1m'
+df = p.chartDF(ticker, timeframe)
+df.head()
+'''
+
+APCA_BASE_URL = 'https://paper-api.alpaca.markets'
+APCA_API_KEY_ID = 'PKJ14YN22VN1J8GHINHJ'
+APCA_API_SECRET_KEY = 'G6OGBzymuDrSWGAJrW9B0bcOPevYKOzFVpgrFFbv'
+#os.environ["APCA_API_BASE_URL"] = "https://paper-api.alpaca.markets"
+
+def main():
+    api = tradeapi.REST(APCA_API_KEY_ID, APCA_API_SECRET_KEY, APCA_BASE_URL)
+    account = api.get_account()
+    print(account.status)
+    while True:
+        switch = input("Place order? y/n")
+        if switch == 'n':
+            break
+        else:
+            place_order(api, account)
+
+
+def place_order(api, account):
+    api.submit_order(
+        symbol='TSLA',
+        side='buy',
+        type='market',
+        qty='1',
+        time_in_force='day',
+        order_class='bracket',
+        take_profit=dict(
+            limit_price='2000.0'
+        ),
+        stop_loss=dict(
+            stop_price='1900.00',
+            limit_price='1900.00',
+        )
+    )
+
+
+main()
