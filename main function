@@ -1,0 +1,21 @@
+import pandas as pd
+import pyEX
+import alpaca_trade_api as tradeapi
+from datetime import datetime
+import os
+
+'''
+p = pyEX.Client('https://cloud.iexapis.com/')
+ticker = 'AMD'
+timeframe = '1m'
+df = p.chartDF(ticker, timeframe)
+df.head()
+'''
+APCA_BASE_URL = 'https://api.alpaca.markets'
+APCA_API_KEY_ID = '<KEY_ID_HERE>'
+APCA_API_SECRET_KEY = '<SECRET_KEY_HERE>'
+#os.environ["APCA_API_BASE_URL"] = "https://paper-api.alpaca.markets"
+
+api = tradeapi.REST(APCA_API_KEY_ID, APCA_API_SECRET_KEY, APCA_BASE_URL)
+account = api.get_account()
+print(account.status)
